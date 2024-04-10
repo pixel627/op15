@@ -140,3 +140,142 @@ void swapColumns(matrix m, int j1, int j2) {
         m.values[i][j2] = temp;
     }
 }
+
+int getSum(int *a, int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += a[i];
+    }
+    return sum;
+}
+
+int getSumCol(int **values, int nRows, int n) {
+    int sum = 0;
+    for (int i = 0; i < nRows; i++) {
+        int *row = values[i];
+        sum += row[n];
+    }
+    return sum;
+}
+
+void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
+    int arr[m.nRows];
+
+    for (int i = 0; i < m.nRows; i++) {
+        int sum = criteria(m.values[i], m.nCols);
+        arr[i] = sum;
+    }
+    insertionSortBySumRows(arr, &m);
+}
+
+void selectionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)) {
+    bool debug = false;
+    int arr[m.nCols];
+
+    for (int i = 0; i < m.nCols; i++) {
+        int col[m.nRows];
+
+        for (int j = 0; j < m.nRows; j++) {
+            int *row = m.values[j];
+            col[j] = row[i];
+        }
+
+        int sum = criteria(col, m.nRows);
+        arr[i] = sum;
+        if (debug) {
+            printf("%d\t", sum);
+        }
+    }
+    if (debug) {
+        printf("\n");
+    }
+    selectionSortBySumCols(arr, &m);
+}
+
+bool isSquareMatrix(matrix *m) {
+    return m->nRows == m->nCols;
+}
+
+bool areTwoMatricesEqual(matrix *m1, matrix *m2) {
+    if (m1->nRows != m2->nRows) {
+        return false;
+    }
+    if (m1->nCols != m2->nCols) {
+        return false;
+    }
+
+    for (int i = 0; i < m1->nRows; i++) {
+        int *row1 = m1->values[i];
+        int *row2 = m2->values[i];
+
+        int res = memcmp(row1, row2, sizeof(int) * m1->nCols);
+
+        if (res) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isEMatrix(matrix *m) {
+    if (m->nRows != m->nCols) {
+        return false;
+    }
+
+    for (int i = 0; i < m->nRows; i++) {
+        int *row = m->values[i];
+        for (int j = 0; j < m->nCols; j++) {
+            if (i == j) {
+                if (row[j] != 1) {
+                    return false;
+                }
+            } else {
+                if (row[j] != 0) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool isSymmetricMatrix(matrix *m) {
+    if (m->nRows != m->nCols) {
+        return false;
+    }
+
+    for (int i = 0; i < m->nRows; i++) {
+        for (int j = 0; j < m->nCols; j++) {
+            if (m->values[i][j] != m->values[j][i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void transposeSquareMatrix(matrix *m) {
+    if (m->nRows != m->nCols) {
+        return;
+    }
+
+    for (int i = 0; i < m->nRows; i++) {
+        for (int j = i; j < m->nCols; j++) {
+            if (i != j) {
+                swap(&m->values[i][j], &m->values[j][i]);
+            }
+        }
+    }
+}
+
+void transposeMatrix(matrix *m) {
+    matrix m_new = getMemMatrix(m->nCols, m->nRows);
+
+    for (int i = 0; i < m->nRows; i++) {
+        for (int j = 0; j < m->nCols; j++) {
+            m_new.values[j][i] = m->values[i][j];
+        }
+    }
+    freeMemMatrix(m);
+    *m = m_new;
+}

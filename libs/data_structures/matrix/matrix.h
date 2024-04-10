@@ -43,4 +43,20 @@ void swapColumns(matrix m, int j1, int j2);
 int getSum(int *a, int n);
 int getSumCol(int **values, int nRows, int n);
 
+void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int*, int));
+
+void selectionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int*, int));
+
+bool isSquareMatrix(matrix *m);
+
+bool areTwoMatricesEqual(matrix *m1, matrix *m2);
+
+bool isEMatrix(matrix *m);
+
+bool isSymmetricMatrix(matrix *m);
+
+void transposeSquareMatrix(matrix *m);
+
+void transposeMatrix(matrix *m);
+
 #endif //OP15_MATRIX_H
