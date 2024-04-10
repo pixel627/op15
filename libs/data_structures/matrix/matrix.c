@@ -121,3 +121,22 @@ void outputMatrices(matrix *ms, int nMatrices) {
         printf("\n");
     }
 }
+
+void swapRows(matrix m, int i1, int i2) {
+    if ((i1 >= m.nRows) || (i2 >= m.nRows)) {
+        fprintf(stderr, "matrix index out of bounds");
+        exit(1);
+    }
+
+    int *temp = m.values[i1];
+    m.values[i1] = m.values[i2];
+    m.values[i2] = temp;
+}
+
+void swapColumns(matrix m, int j1, int j2) {
+    for (int i = 0; i < m.nCols; i++) {
+        int temp = m.values[i][j1];
+        m.values[i][j1] = m.values[i][j2];
+        m.values[i][j2] = temp;
+    }
+}
